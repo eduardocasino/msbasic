@@ -10,6 +10,11 @@ APPLE := 1
 .elseif .def(kb9)
 KIM := 1
 .include "defines_kim.s"
+.elseif .def(kb9iec)
+KIM := 1
+KIM_IEC := 1
+.include "defines_kim.s"
+.include "defines_kimiec.s"
 .elseif .def(cbmbasic2)
 CBM2 := 1
 .include "defines_cbm2.s"

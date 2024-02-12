@@ -1,5 +1,28 @@
 .segment "CODE"
+
 SAVE:
+.ifdef KIM_IEC
+        beq     TPSAVE
+        cmp     #$22                    ; '"'
+        bne     LERROR
+        jsr     STRTXT
+        jsr     SEINIT
+        lda     TXTTAB
+        ldy     TXTTAB+1
+        sta     DSAL
+        sty     DSAH
+        lda     VARTAB
+        ldy     VARTAB+1
+        sta     DEAL
+        sty     DEAH
+
+        jsr     FREFAC
+
+        jmp     FWRITE
+LERROR:
+        jmp     SYNERR
+TPSAVE:
+.endif
         tsx
         stx     INPUTFLG
         lda     #$37
@@ -25,10 +48,49 @@ QT_LOADED:
         .byte   $00
 QT_SAVED:
         .byte   "SAVED"
-        .byte   $0D,$0A,$00,$00,$00,$00,$00,$00
-        .byte   $00,$00,$00,$00,$00,$00,$00,$00
-        .byte   $00,$00,$00,$00,$00,$00,$00
+        .byte   $0D,$0A,$00           ; patch v1.2 HO 2021
+.ifdef KIM_IEC
+DCMD:
+        cmp     #$22                    ; '"'
+        bne     LERROR
+        jsr     STRTXT
+        ;lda     #$3B                   ; ";" TODO: Manage disk number
+        ;jsr     SYNCHR
+        jsr     SEINIT
+        jsr     FREFAC                  ; FREFAC returns:
+                                        ; A == length
+                                        ; X == addr lo
+                                        ; Y == addr hi
+        jmp     DSKCMD                  ; Which is what DSKCMD expects
+
+DIR:    
+        bne     LRET
+        jsr     SEINIT
+        jmp     DIRLIST
+
+LRET:   rts
+
+VERIFY:
+        beq     LERROR
+
+        ldx     #1
+        jmp     DOLOAD
+.endif
 LOAD:
+.ifdef KIM_IEC
+        beq     TPLOAD
+
+        ldx     #0
+DOLOAD:
+        stx     VERCK
+        cmp     #$22                    ; '"'
+        bne     LERROR
+        jsr     STRTXT
+        jsr     SEINIT
+        jsr     FREFAC
+        jmp     FREAD       
+TPLOAD:
+.endif
         lda     TXTTAB
         ldy     TXTTAB+1
         sta     $17F5
@@ -60,3 +122,4 @@ L27C2:
         stx     VARTAB
         sty     VARTAB+1
         jmp     FIX_LINKS
+

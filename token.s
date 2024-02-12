@@ -78,7 +78,11 @@
 		keyword_rts "PRT", PRT
 .endif
 		keyword_rts "NEW", NEW
-
+.ifdef KIM_IEC
+		keyword_rts "DCMD", DCMD
+		keyword_rts "DIR", DIR
+		keyword_rts "VERIFY", VERIFY
+.endif
 		count_tokens
 
 		keyword	"TAB(", TOKEN_TAB
@@ -114,6 +118,7 @@ UNFNC:
 .endif
 .ifndef CONFIG_NO_POKE
   .ifdef CONFIG_RAM
+LUSRTOKEN:  
 		keyword_addr "USR", IQERR
   .else
 		keyword_addr "USR", USR, TOKEN_USR

@@ -1,7 +1,7 @@
 all: tmp/kb9v2.bin
 
 tmp/kb9v2.o: msbasic.s
-	ca65 -D kb9 $< -o $(basename $@).o -l $(basename $@).lst
+	ca65 -D kb9iec $< -o $(basename $@).o -l $(basename $@).lst
 
 tmp/kb9v2.bin: tmp/kb9v2.o kb9.cfg
 	ld65 -C kb9.cfg $< -o $(basename $@).bin -Ln $(basename $@).lbl
@@ -20,4 +20,4 @@ tmp/kb9v2.o: \
 	header.s kim_loadsave.s misc3.s token.s cbm1_patches.s defines_osi.s \
 	init.s loadsave.s trig.s cbm_iscntc.s defines.s inline.s macros.s \
 	osi_iscntc.s var.s chrget.s defines_sym1.s input.s memory.s poke.s \
-	zeropage.s
+	zeropage.s defines_kimiec.s
