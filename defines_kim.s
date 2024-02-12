@@ -2,12 +2,13 @@
 CONFIG_11A := 1
 
 CONFIG_MONCOUT_DESTROYS_Y := 1
-CONFIG_NULL := 1
+CONFIG_NULL := 1                      ; patch HO 2021
 CONFIG_PRINT_CR := 1 ; print CR when line end reached
 CONFIG_RAM := 1
-CONFIG_ROR_WORKAROUND := 1
+;CONFIG_ROR_WORKAROUND := 1             ; patch HO 2021
 CONFIG_SAFE_NAMENOTFOUND := 1
 CONFIG_SCRTCH_ORDER := 2
+CONFIG_SMALL := 1 
 
 ; zero page
 ZP_START1 = $00

@@ -55,8 +55,8 @@ INLIN2:
 INLINAIM:
     .endif
     .ifndef CONFIG_NO_LINE_EDITING
-        cmp     #$07
-        beq     L2443
+        cmp     #$08
+        beq     L2420
     .endif
         cmp     #$0D
         beq     L2453
@@ -85,7 +85,7 @@ INLINAIM:
       .ifdef MICROTAN
         cmp     #$7F ; DEL
       .else
-        cmp     #$5F ; _
+        cmp     #$08 ; _
       .endif
         beq     L2420
       .endif

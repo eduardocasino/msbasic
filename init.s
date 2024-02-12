@@ -36,6 +36,7 @@ COLD_START:
         sta     $05
 .else
   .ifndef CBM2
+        cld                     ; patch for KIM-1 HO 2021
         ldx     #$FF
         stx     CURLIN+1
   .endif
@@ -489,7 +490,7 @@ QT_BASIC:
         .byte   "OSI 6502 BASIC VERSION 1.0 REV 3.2"
   .endif
   .ifdef KIM
-        .byte   "MOS TECH 6502 BASIC V1.1"
+        .byte   "MOS TECH 6502 BASIC V1.2"
   .endif
   .ifdef MICROTAN
         .byte   "MICROTAN BASIC"

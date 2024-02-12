@@ -282,11 +282,8 @@ PROCESS_INPUT_ITEM:
         ldx     #<(INPUTBUFFER-1)
         ldy     #>(INPUTBUFFER-1)
   .endif
-  .if .def(CONFIG_2) && (!.def(CONFIG_NO_INPUTBUFFER_ZP))
+
         beq     L2AF8	; always
-  .else
-        bne     L2AF8	; always
-  .endif
 L2AF0:
  .endif
 .endif
