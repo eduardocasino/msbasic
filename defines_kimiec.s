@@ -1,13 +1,15 @@
-; IEC start and end addresses
-DSAL            = $00E5
-DSAH            = $00E6
-DEAL            = $00E7
-DEAH            = $00E8
-VERCK           = $00E9
-
 ; IEC disk functions
 SEINIT          := $F000
-DSKCMD          := $F003
-DIRLIST         := $F006
-FREAD           := $F009
-FWRITE          := $F00C
+SETSAD          := $F003
+SETEAD          := $F006
+SETMUSS         := $F009
+SETVRCK         := $F00C
+SETFA           := $F00F
+SETSA           := $F012
+GETSTAT         := $F015
+SETMSGF         := $F018
+GETMSGF         := $F01B
+DSKCMD          := $F01E
+DIRLIST         := $F021
+FREAD           := $F024
+FWRITE          := $F027

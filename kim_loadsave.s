@@ -9,12 +9,10 @@ SAVE:
         jsr     SEINIT
         lda     TXTTAB
         ldy     TXTTAB+1
-        sta     DSAL
-        sty     DSAH
+        jsr     SETSAD
         lda     VARTAB
         ldy     VARTAB+1
-        sta     DEAL
-        sty     DEAH
+        jsr     SETEAD
 
         jsr     FREFAC
 
@@ -73,16 +71,19 @@ LRET:   rts
 VERIFY:
         beq     LERROR
 
-        ldx     #1
+        tax
+        lda     #1
         jmp     DOLOAD
 .endif
 LOAD:
 .ifdef KIM_IEC
         beq     TPLOAD
 
-        ldx     #0
+        tax
+        lda     #0
 DOLOAD:
-        stx     VERCK
+        jsr     SETVRCK
+        txa
         cmp     #$22                    ; '"'
         bne     LERROR
         jsr     STRTXT
