@@ -1,4 +1,10 @@
+; Values for the message flag
+;
+FPRNMSG         = %10000000
+FPRNERR         = %01000000
+
 ; IEC disk functions
+;
 SEINIT          := $F000
 SETSAD          := $F003
 SETEAD          := $F006

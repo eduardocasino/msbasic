@@ -55,6 +55,8 @@ DCMD:
         ;lda     #$3B                   ; ";" TODO: Manage disk number
         ;jsr     SYNCHR
         jsr     SEINIT
+        lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
+        jsr     SETMSGF
         jsr     FREFAC                  ; FREFAC returns:
                                         ; A == length
                                         ; X == addr lo
@@ -88,6 +90,8 @@ DOLOAD:
         bne     LERROR
         jsr     STRTXT
         jsr     SEINIT
+        lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
+        jsr     SETMSGF
         jsr     FREFAC
         jmp     FREAD       
 TPLOAD:
