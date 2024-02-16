@@ -66,6 +66,8 @@ DCMD:
 DIR:    
         bne     LRET
         jsr     SEINIT
+        lda     #FPRNERR                ; Print IEC errors
+        jsr     SETMSGF
         jmp     DIRLIST
 
 LRET:   rts
