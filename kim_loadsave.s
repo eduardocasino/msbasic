@@ -92,6 +92,8 @@ DOLOAD:
         bne     LERROR
         jsr     STRTXT
         jsr     SEINIT
+        lda     #1                      ; Load starting from addr
+        jsr     SETSA                   ; specified by the PRG header
         lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
         jsr     SETMSGF
         jsr     FREFAC
