@@ -1,13 +1,16 @@
-all: tmp/kb9v2.bin
+all: tmp/kb9v2.hex
 
-tmp/kb9v2.o: msbasic.s
-	ca65 -D kb9iec $< -o $(basename $@).o -l $(basename $@).lst
+tmp/kb9v2.hex: tmp/kb9v2.bin
+	srec_cat $< -binary -offset 0x2000 -o $@ -Intel -address_length=2
 
 tmp/kb9v2.bin: tmp/kb9v2.o kb9.cfg
 	ld65 -C kb9.cfg $< -o $(basename $@).bin -Ln $(basename $@).lbl
 
+tmp/kb9v2.o: msbasic.s
+	ca65 -D kb9iec $< -o $(basename $@).o -l $(basename $@).lst
+
 clean:
-	$(RM) tmp/*.o tmp/*.lst tmp/*.bin tmp/*.lbl
+	$(RM) tmp/*.o tmp/*.lst tmp/*.bin tmp/*.hex tmp/*.lbl
 
 tmp/kb9v2.o: \
 	aim65_extra.s defines_aim65.s error.s iscntc.s message.s print.s \
