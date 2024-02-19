@@ -95,7 +95,18 @@ DOLOAD:
         lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
         jsr     SETMSGF
         jsr     FREFAC
-        jmp     FREAD       
+        jsr     FREAD
+        jsr     GETSTAT                 ; Get status into A
+        and     #SPERR                  ; Verify error?
+        bne     VERERR                  ; Yes, print message
+        rts                             ; Otherwise return
+VERERR:
+        lda     #<QT_VERERR
+        ldy     #>QT_VERERR
+        jmp     STROUT
+QT_VERERR:
+        .byte   "VERIFY ERR"
+        .byte   $0D,$0A,$00
 TPLOAD:
 .endif
         lda     TXTTAB

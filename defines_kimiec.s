@@ -3,6 +3,11 @@
 FPRNMSG         = %10000000
 FPRNERR         = %01000000
 
+; IEC Error mask
+;
+SPERR           = $10           ; Second Pass error (verify error)
+
+
 ; IEC disk functions
 ;
 SEINIT          := $F000
