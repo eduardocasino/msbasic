@@ -7,16 +7,19 @@ SAVE:
         bne     LERROR
         jsr     STRTXT
         jsr     SEINIT
+        lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
+        jsr     SETMSGF
         lda     TXTTAB
         ldy     TXTTAB+1
         jsr     SETSAD
         lda     VARTAB
         ldy     VARTAB+1
         jsr     SETEAD
-
         jsr     FREFAC
-
-        jmp     FWRITE
+        jsr     FWRITE
+        jsr     GETSTAT                 ; Get status into A
+        beq     SAVED                   ; No error, print SAVED and exit
+        rts
 LERROR:
         jmp     SYNERR
 TPSAVE:
@@ -38,6 +41,7 @@ TPSAVE:
         jmp     L1800
         ldx     INPUTFLG
         txs
+SAVED:
         lda     #<QT_SAVED
         ldy     #>QT_SAVED
         jmp     STROUT
@@ -92,23 +96,46 @@ DOLOAD:
         bne     LERROR
         jsr     STRTXT
         jsr     SEINIT
-        lda     #1                      ; Load starting from addr
-        jsr     SETSA                   ; specified by the PRG header
+        lda     #0                      ; Load starting from addr
+        jsr     SETSA                   ; specified by the user
+        lda     TXTTAB
+        ldy     TXTTAB+1
+        jsr     SETMUSS
         lda     #FPRNMSG|FPRNERR        ; Print IEC messages and errors
         jsr     SETMSGF
         jsr     FREFAC
         jsr     FREAD
         jsr     GETSTAT                 ; Get status into A
+        and     #~EOI                   ; Mask out End Of Input indicator
+        bne     LDERR                   ; Error, go check it
+        stx     VARTAB                  ; No error, update program end
+        sty     VARTAB+1
+        jsr     GETVRCK                 ; Are we verifying?
+        beq     LOADED                  ; No, print "LOADED"
+        lda     #<QT_VERIFIED           ; Yes, print "VERIFIED"
+        ldy     #>QT_VERIFIED
+        jmp     MSGOUT
+LOADED:
+        lda     #<QT_LOADED
+        ldy     #>QT_LOADED
+MSGOUT:
+        jsr     STROUT                  ; Print message and
+        lda     #<QT_OK
+        ldy     #>QT_OK
+        jsr     STROUT
+        jmp     FIX_LINKS               ; update pointers
+LDERR:
         and     #SPERR                  ; Verify error?
-        bne     VERERR                  ; Yes, print message
-        rts                             ; Otherwise return
-VERERR:
-        lda     #<QT_VERERR
+        beq     LRET                    ; No, just return
+        lda     #<QT_VERERR             ; Yes, print error and exit
         ldy     #>QT_VERERR
         jmp     STROUT
+QT_VERIFIED:
+        .byte   "VERIFIED"
+        .byte   $00
 QT_VERERR:
         .byte   "VERIFY ERR"
-        .byte   $0D,$0A,$00
+        .byte   $00
 TPLOAD:
 .endif
         lda     TXTTAB
@@ -135,10 +162,7 @@ L27A6:
         ldx     $17ED
         ldy     $17EE
         txa
-        bne     L27C2
-        nop
 L27C2:
-        nop
         stx     VARTAB
         sty     VARTAB+1
         jmp     FIX_LINKS
