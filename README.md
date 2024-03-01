@@ -1,5 +1,34 @@
 # Microsoft BASIC for 6502
 
+## IEC Disk integration
+
+**WARNING: this code is experimental and may (will) contain bugs. Use at your own risk.**
+
+This branch contains the following changes for the KIM-1:
+
+* IEC Disk support. Added 'DIR', 'VERIFY' and 'DCMD' tokens and modified 'LOAD' and 'SAVE'
+* Configurable load address (defaults at 0x2000, can be modify editing the PAGE variable in the Makefile)
+* Jump to COLD_START in header.s, making the load address the entry point.
+* 'make prg' generates a .prg file
+
+Only drive 8 is supported, it should be easy to add support for multiple disks.
+
+### New and mofified tokens
+
+'**LOAD**' and '**SAVE**', without arguments, work the same as the originals: loads and saves the current program from/to tape.
+
+'**LOAD "\<FILE\>"**' and '**SAVE "\<FILE\>"**' will load and save file **\<FILE\>** from/to disk.
+
+'**VERIFY "\<FILE\>"**' will compare the current program in memory against the **\<FILE\>** program on disk.
+
+'**DIR**' will list disk directory contents to screen. The current program in memory is not altered.
+
+'**DCMD "\<CMD\>**" will send command **\<CMD\>** to disk. Example:
+
+**DCMD "S0:X\*"** will delete (scratch) all files beginning with "X".
+
+## Original README.md follows:
+
 This is a single integrated assembly source tree that can generate nine different versions of Microsoft BASIC for 6502.
 
 By running ./make.sh, this will generate all versions and compare them to the original files byte by byte. The CC65 compiler suite is need to build this project.
