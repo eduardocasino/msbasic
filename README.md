@@ -13,6 +13,8 @@ This branch contains the following changes for the KIM-1:
 
 Only drive 8 is supported, it should be easy to add support for multiple disks.
 
+The integration assumes that the [xkim1541 routines](https://github.com/eduardocasino/xkim1541) are placed in memory starting at 0xF000. Modify **defines_kimiec.s** if they are somewhere else.
+
 ### New and mofified tokens
 
 '**LOAD**' and '**SAVE**', without arguments, work the same as the originals: loads and saves the current program from/to tape.
