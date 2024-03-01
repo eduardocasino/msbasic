@@ -1,13 +1,26 @@
+# PAGE : High byte of loading address (20 loads to 0x2000)
+#           
+PAGE = 20
+
+SHELL = bash
+
 all: tmp/kb9v2.hex
 
+prg: tmp/kb9v2.bin
+	echo -n -e \\x00\\x$(PAGE) > $(basename $<).prg
+	cat $< >> $(basename $<).prg
+
 tmp/kb9v2.hex: tmp/kb9v2.bin
-	srec_cat $< -binary -offset 0x2000 -o $@ -Intel -address_length=2
+	srec_cat $< -binary -offset 0x$(PAGE)00 -o $@ -Intel -address_length=2
 
 tmp/kb9v2.bin: tmp/kb9v2.o kb9.cfg
 	ld65 -C kb9.cfg $< -o $(basename $@).bin -Ln $(basename $@).lbl
 
 tmp/kb9v2.o: msbasic.s
 	ca65 -D kb9iec $< -o $(basename $@).o -l $(basename $@).lst
+
+kb9.cfg : kb9.cfg.in Makefile
+		sed 's/%%ADDR%%/$$$(PAGE)00/' $< > $@
 
 clean:
 	$(RM) tmp/*.o tmp/*.lst tmp/*.bin tmp/*.hex tmp/*.lbl
